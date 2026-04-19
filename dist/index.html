@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portafolio Digital Estudiantil</title>
+
+  <!-- Fuentes de Google: Playfair Display para títulos, DM Sans para texto normal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <!-- Íconos Phosphor: librería de íconos SVG profesionales -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+
+  <!-- Supabase: librería para conectarse a la base de datos en la nube
+       Debe cargarse ANTES que script.js para que el código pueda usarla -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Hoja de estilos principal -->
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+  <!-- Punto del cursor personalizado (solo visible en computadora) -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- ============================================================
+       PANTALLA DE CARGA
+       Aparece al abrir la página y desaparece automáticamente
+  ============================================================ -->
+  <div class="splash" id="splash">
+    <div class="splash-inner">
+      <span class="splash-letter" style="--i:0">P</span>
+      <span class="splash-letter" style="--i:1">O</span>
+      <span class="splash-letter" style="--i:2">R</span>
+      <span class="splash-letter" style="--i:3">T</span>
+      <span class="splash-letter" style="--i:4">A</span>
+      <span class="splash-letter" style="--i:5">F</span>
+      <span class="splash-letter" style="--i:6">O</span>
+      <span class="splash-letter" style="--i:7">L</span>
+      <span class="splash-letter" style="--i:8">I</span>
+      <span class="splash-letter" style="--i:9">O</span>
+    </div>
+    <p class="splash-sub">Digital Estudiantil</p>
+  </div>
+
+  <!-- ============================================================
+       MENÚ LATERAL
+       En celular se oculta y aparece con el botón de menú
+  ============================================================ -->
+  <nav class="sidenav" id="sidenav">
+    <div class="nav-logo">PD</div>
+    <ul class="nav-links">
+      <li><a href="#hero"         class="nav-link active" data-label="Inicio"><i class="ph-bold ph-house-simple"></i></a></li>
+      <li><a href="#presentacion" class="nav-link"        data-label="Presentación"><i class="ph-bold ph-user-circle"></i></a></li>
+      <li><a href="#actividades"  class="nav-link"        data-label="Actividades"><i class="ph-bold ph-books"></i></a></li>
+      <li><a href="#proyectos"    class="nav-link"        data-label="Proyectos"><i class="ph-bold ph-rocket-launch"></i></a></li>
+      <li><a href="#evaluaciones" class="nav-link"        data-label="Evaluaciones"><i class="ph-bold ph-chart-bar"></i></a></li>
+      <li><a href="#reflexiones"  class="nav-link"        data-label="Reflexiones"><i class="ph-bold ph-chat-dots"></i></a></li>
+      <li><a href="#rubrica"      class="nav-link"        data-label="Rúbrica"><i class="ph-bold ph-clipboard-text"></i></a></li>
+      <li><a href="#contacto"     class="nav-link"        data-label="Contacto"><i class="ph-bold ph-envelope-simple"></i></a></li>
+    </ul>
+    <!-- Barra que indica qué tan abajo está el usuario en la página -->
+    <div class="nav-progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+  </nav>
+
+  <!-- Botón de menú para celular -->
+  <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+    <i class="ph-bold ph-list"></i>
+  </button>
+
+  <!-- Fondo oscuro detrás del menú cuando está abierto en celular -->
+  <div class="nav-backdrop" id="navBackdrop"></div>
+
+  <!-- ============================================================
+       CONTENIDO PRINCIPAL
+  ============================================================ -->
+  <main class="main-content" id="mainContent">
+
+    <!-- ─── SECCIÓN 1: INICIO ─── -->
+    <section class="section hero-section" id="hero">
+      <div class="particles" id="particles"></div>
+
+      <div class="hero-content reveal">
+        <span class="hero-badge">📂 Año Académico 2025</span>
+        <h1 class="hero-title">
+          Portafolio<br/>
+          <span class="hero-accent">Digital</span>
+        </h1>
+        <p class="hero-subtitle">
+          Un espacio para reflexionar, crecer y documentar el viaje del aprendizaje.
+        </p>
+
+        <!-- Etiquetas con datos del estudiante, el JS las rellena -->
+        <div class="hero-meta">
+          <div class="meta-chip" id="metaNombre"><i class="ph-bold ph-user"></i> Nombre del Estudiante</div>
+          <div class="meta-chip" id="metaAsignatura"><i class="ph-bold ph-book-open"></i> Asignatura</div>
+          <div class="meta-chip" id="metaFecha"><i class="ph-bold ph-calendar"></i> Fecha de Inicio</div>
+        </div>
+
+        <button class="btn-primary" id="btnConfig">
+          <i class="ph-bold ph-pencil-simple"></i> Configurar Portafolio
+        </button>
+      </div>
+
+      <!-- Contadores de estadísticas animados -->
+      <div class="hero-stats reveal">
+        <div class="stat-card float-1">
+          <span class="stat-number" id="statActividades">0</span>
+          <span class="stat-label">Actividades</span>
+        </div>
+        <div class="stat-card float-2">
+          <span class="stat-number" id="statProyectos">0</span>
+          <span class="stat-label">Proyectos</span>
+        </div>
+        <div class="stat-card float-3">
+          <span class="stat-number" id="statReflexiones">0</span>
+          <span class="stat-label">Reflexiones</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECCIÓN 2: PRESENTACIÓN ─── -->
+    <section class="section" id="presentacion">
+      <div class="section-header reveal">
+        <span class="section-tag">01</span>
+        <h2 class="section-title">Presentación</h2>
+        <p class="section-desc">Conoce quién soy y mis expectativas para esta asignatura.</p>
+      </div>
+
+      <div class="presentacion-grid reveal">
+
+        <!-- Tarjeta de perfil con foto, nombre, matrícula -->
+        <div class="profile-card">
+
+          <!-- Zona de la foto de perfil
+               Haz clic en el círculo para seleccionar una imagen -->
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar" id="profileAvatar" title="Clic para cambiar la foto">
+              <span id="avatarInitials">?</span>
+              <!-- Ícono de cámara que aparece al pasar el cursor encima -->
+              <div class="avatar-overlay">
+                <i class="ph-bold ph-camera"></i>
+                <span>Cambiar foto</span>
+              </div>
+            </div>
+            <!-- Input de imagen oculto, se activa desde JavaScript -->
+            <input type="file" id="fotoInput" accept="image/*" style="display:none"/>
+          </div>
+
+          <!-- Nombre, matrícula y asignatura (los rellena JavaScript) -->
+          <h3 id="profileNombre">Nombre del Estudiante</h3>
+          <p id="profileMatricula" class="profile-matricula">
+            <i class="ph-bold ph-identification-card"></i> Matrícula: —
+          </p>
+          <p id="profileAsignatura" class="profile-sub">Asignatura</p>
+
+          <div class="profile-badges">
+            <span class="badge"><i class="ph-bold ph-graduation-cap"></i> Estudiante</span>
+            <span class="badge"><i class="ph-bold ph-books"></i> Aprendiz</span>
+          </div>
+        </div>
+
+        <!-- Bloques de texto que se editan haciendo clic directo -->
+        <div class="presentacion-texto">
+          <h3>Sobre mí</h3>
+          <div class="editable-block" id="presentacionTexto" contenteditable="true"
+               data-placeholder="Escribe aquí una breve introducción sobre ti y tus expectativas para la asignatura...">
+          </div>
+          <h3 style="margin-top:2rem">Objetivo del Portafolio</h3>
+          <div class="editable-block" id="objetivoTexto" contenteditable="true"
+               data-placeholder="Describe el objetivo general que persigues con este portafolio digital...">
+          </div>
+        </div>
+      </div>
+
+      <!-- Beneficios del portafolio -->
+      <div class="beneficios-grid reveal">
+        <div class="beneficio-card">
+          <span class="beneficio-icon"><i class="ph-bold ph-trend-up"></i></span>
+          <h4>Visibilidad del Progreso</h4>
+          <p>Tanto tú como el docente pueden visualizar el avance a lo largo del curso.</p>
+        </div>
+        <div class="beneficio-card">
+          <span class="beneficio-icon"><i class="ph-bold ph-brain"></i></span>
+          <h4>Fomento de la Autonomía</h4>
+          <p>Tomas un papel activo en tu propio aprendizaje y desarrollo.</p>
+        </div>
+        <div class="beneficio-card">
+          <span class="beneficio-icon"><i class="ph-bold ph-laptop"></i></span>
+          <h4>Habilidades Digitales</h4>
+          <p>Te familiarizas con herramientas tecnológicas útiles para el estudio.</p>
+        </div>
+        <div class="beneficio-card">
+          <span class="beneficio-icon"><i class="ph-bold ph-handshake"></i></span>
+          <h4>Mejora la Comunicación</h4>
+          <p>Facilita la comunicación y retroalimentación con el docente.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECCIÓN 3: ACTIVIDADES ─── -->
+    <section class="section" id="actividades">
+      <div class="section-header reveal">
+        <span class="section-tag">02</span>
+        <h2 class="section-title">Actividades y Evaluaciones</h2>
+        <p class="section-desc">Registro de tareas, trabajos y evaluaciones corregidas.</p>
+      </div>
+
+      <div class="actions-bar reveal">
+        <button class="btn-primary" id="btnAddActividad">
+          <i class="ph-bold ph-plus"></i> Agregar Actividad
+        </button>
+        <div class="filtros">
+          <button class="filtro-btn active" data-filter="all">Todas</button>
+          <button class="filtro-btn" data-filter="tarea">📝 Tareas</button>
+          <button class="filtro-btn" data-filter="evaluacion">📊 Evaluaciones</button>
+          <button class="filtro-btn" data-filter="proyecto">🚀 Proyectos</button>
+        </div>
+      </div>
+
+      <div class="actividades-grid reveal" id="actividadesGrid">
+        <div class="empty-state" id="emptyActividades">
+          <i class="ph-bold ph-folder-open"></i>
+          <p>No hay actividades aún. ¡Agrega tu primera actividad!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECCIÓN 4: PROYECTOS ─── -->
+    <section class="section" id="proyectos">
+      <div class="section-header reveal">
+        <span class="section-tag">03</span>
+        <h2 class="section-title">Proyectos</h2>
+        <p class="section-desc">Proyectos desarrollados, sus fases y resultados obtenidos.</p>
+      </div>
+
+      <div class="actions-bar reveal">
+        <button class="btn-primary" id="btnAddProyecto">
+          <i class="ph-bold ph-plus"></i> Agregar Proyecto
+        </button>
+      </div>
+
+      <div class="proyectos-grid reveal" id="proyectosGrid">
+        <div class="empty-state" id="emptyProyectos">
+          <i class="ph-bold ph-rocket-launch"></i>
+          <p>No hay proyectos aún. ¡Comienza tu primer proyecto!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECCIÓN 5: PROGRESO ─── -->
+    <section class="section" id="evaluaciones">
+      <div class="section-header reveal">
+        <span class="section-tag">04</span>
+        <h2 class="section-title">Mi Progreso</h2>
+        <p class="section-desc">Visualización del avance académico a lo largo del curso.</p>
+      </div>
+
+      <div class="progreso-layout reveal">
+        <div class="grafico-card">
+          <h3>Calificaciones por Actividad</h3>
+          <div class="grafico-bars" id="graficoBars">
+            <div class="grafico-empty">Agrega actividades con calificación para ver el gráfico</div>
+          </div>
+        </div>
+        <div class="promedio-card">
+          <h3>Promedio General</h3>
+          <div class="promedio-circle">
+            <svg viewBox="0 0 120 120" class="progress-ring">
+              <circle class="ring-bg"   cx="60" cy="60" r="52"/>
+              <circle class="ring-fill" cx="60" cy="60" r="52" id="ringFill"/>
+            </svg>
+            <span class="promedio-valor" id="promedioValor">—</span>
+          </div>
+          <p class="promedio-label" id="promedioLabel">Sin calificaciones</p>
+        </div>
+      </div>
+
+      <div class="evaluacion-tipos reveal">
+        <div class="eval-tipo">
+          <div class="eval-icon"><i class="ph-bold ph-mirror"></i></div>
+          <h4>Autoevaluación</h4>
+          <p>El estudiante realiza una autoevaluación periódica de su portafolio.</p>
+        </div>
+        <div class="eval-tipo">
+          <div class="eval-icon"><i class="ph-bold ph-users-three"></i></div>
+          <h4>Coevaluación</h4>
+          <p>Los estudiantes evalúan mutuamente el trabajo de sus compañeros.</p>
+        </div>
+        <div class="eval-tipo">
+          <div class="eval-icon"><i class="ph-bold ph-chalkboard-teacher"></i></div>
+          <h4>Heteroevaluación</h4>
+          <p>El docente evalúa el portafolio utilizando la rúbrica establecida.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECCIÓN 6: REFLEXIONES ─── -->
+    <section class="section" id="reflexiones">
+      <div class="section-header reveal">
+        <span class="section-tag">05</span>
+        <h2 class="section-title">Reflexiones</h2>
+        <p class="section-desc">Espacio para el pensamiento crítico y la introspección académica.</p>
+      </div>
+
+      <div class="actions-bar reveal">
+        <button class="btn-primary" id="btnAddReflexion">
+          <i class="ph-bold ph-plus"></i> Nueva Reflexión
+        </button>
+      </div>
+
+      <div class="reflexiones-finales reveal">
+        <h3>Reflexiones Finales del Curso</h3>
+        <div class="reflexion-campo">
+          <label><i class="ph-bold ph-push-pin"></i> Aprendizajes más significativos</label>
+          <div class="editable-block" id="refAprendizajes" contenteditable="true"
+               data-placeholder="¿Qué aprendizajes te llevas de esta asignatura?..."></div>
+        </div>
+        <div class="reflexion-campo">
+          <label><i class="ph-bold ph-barbell"></i> Fortalezas identificadas</label>
+          <div class="editable-block" id="refFortalezas" contenteditable="true"
+               data-placeholder="¿En qué aspectos te destacas?..."></div>
+        </div>
+        <div class="reflexion-campo">
+          <label><i class="ph-bold ph-wrench"></i> Áreas a mejorar</label>
+          <div class="editable-block" id="refMejorar" contenteditable="true"
+               data-placeholder="¿Qué aspectos puedes trabajar para crecer?..."></div>
+        </div>
+        <div class="reflexion-campo">
+          <label><i class="ph-bold ph-target"></i> Objetivos futuros</label>
+          <div class="editable-block" id="refObjetivos" contenteditable="true"
+               data-placeholder="¿Cuáles son tus próximas metas académicas?..."></div>
+        </div>
+      </div>
+
+      <div class="reflexiones-grid reveal" id="reflexionesGrid">
+        <div class="empty-state" id="emptyReflexiones">
+          <i class="ph-bold ph-chat-dots"></i>
+          <p>No hay reflexiones registradas. ¡Escribe tu primera reflexión!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECCIÓN 7: RÚBRICA ─── -->
+    <section class="section" id="rubrica">
+      <div class="section-header reveal">
+        <span class="section-tag">06</span>
+        <h2 class="section-title">Rúbrica de Evaluación</h2>
+        <p class="section-desc">
+          Criterios de evaluación del portafolio. Haz clic en
+          <i class="ph-bold ph-pencil-simple"></i> para editar cualquier criterio.
+        </p>
+      </div>
+
+      <!-- Tabla de rúbrica — las filas las genera JavaScript para que sean editables -->
+      <div class="rubrica-wrapper reveal">
+        <table class="rubrica-tabla">
+          <thead>
+            <tr>
+              <th>Criterio</th>
+              <th class="hide-xs">Descripción</th>
+              <th>Peso</th>
+              <th>Editar</th>
+            </tr>
+          </thead>
+          <!-- El JS llena este tbody con las filas de la rúbrica -->
+          <tbody id="rubricaBody"></tbody>
+        </table>
+
+        <!-- Fila de total: avisa si la suma no es 100 -->
+        <div class="rubrica-total-row">
+          <span>Total acumulado:</span>
+          <strong id="rubricaTotal">100%</strong>
+          <span id="rubricaTotalMsg" class="rubrica-total-msg"></span>
+        </div>
+      </div>
+
+      <!-- Autoevaluación con sliders y botón de enviar -->
+      <div class="autoevaluacion reveal">
+        <h3>Mi Autoevaluación</h3>
+        <p>Mueve los controles para calificarte del 1 al 10 en cada criterio y luego presiona <strong>Enviar</strong>:</p>
+
+        <!-- Los sliders los genera JavaScript según los criterios de la rúbrica -->
+        <div class="auto-sliders" id="autoSliders"></div>
+
+        <div class="auto-footer">
+          <div class="auto-total">
+            Puntaje estimado: <strong id="autoTotal">0</strong> / 100
+          </div>
+          <!-- Botón de enviar: calcula y muestra el resultado final -->
+          <button class="btn-primary btn-enviar" id="btnEnviarAuto">
+            <i class="ph-bold ph-paper-plane-tilt"></i> Enviar Autoevaluación
+          </button>
+        </div>
+
+        <!-- Bloque de resultado que aparece después de enviar -->
+        <div class="auto-resultado" id="autoResultado" style="display:none">
+          <i class="ph-bold ph-check-circle"></i>
+          <div>
+            <strong>Autoevaluación enviada</strong>
+            <p id="autoResultadoTexto"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECCIÓN 8: CONTACTO ─── -->
+    <section class="section" id="contacto">
+      <div class="section-header reveal">
+        <span class="section-tag">07</span>
+        <h2 class="section-title">Contacto</h2>
+        <p class="section-desc">Información de contacto y comentarios del docente.</p>
+      </div>
+
+      <div class="contacto-grid reveal">
+
+        <!-- Comentarios del docente -->
+        <div class="comentarios-card">
+          <h3><i class="ph-bold ph-chat-centered-dots"></i> Comentarios del Docente</h3>
+          <div class="comentarios-lista" id="comentariosLista">
+            <div class="empty-state">
+              <i class="ph-bold ph-chat-dots"></i>
+              <p>Sin comentarios aún.</p>
+            </div>
+          </div>
+          <div class="comentario-form">
+            <input type="text" id="inputComentario" placeholder="Escribe un comentario o retroalimentación..."/>
+            <button class="btn-primary" id="btnComentario">
+              <i class="ph-bold ph-paper-plane-tilt"></i> Enviar
+            </button>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             INFORMACIÓN DE CONTACTO
+             ────────────────────────────────────────────────────────
+             CÓMO EDITAR ESTA SECCIÓN:
+             1. Busca el texto que dice "CAMBIA AQUÍ"
+             2. Reemplaza el enlace (href="...") con tu propio link
+             3. Reemplaza el texto visible con tu información
+             4. Si no quieres que sea un link, elimina el href=""
+                y cambia la etiqueta <a> por un <div>
+        ════════════════════════════════════════════════════════ -->
+        <div class="contacto-info-card">
+          <h3><i class="ph-bold ph-address-book"></i> Mi Información de Contacto</h3>
+
+          <div class="contacto-links">
+
+            <!-- ── INSTAGRAM ──────────────────────────────────────
+                 CAMBIA AQUÍ el href con tu link de Instagram
+                 Ejemplo: href="https://www.instagram.com/maria.garcia"
+                 CAMBIA AQUÍ el texto @TU_USUARIO con tu @usuario real -->
+            <a class="contacto-item" href="https://www.instagram.com/TU_USUARIO_AQUI" target="_blank">
+              <div class="contacto-icon-wrap instagram">
+                <i class="ph-bold ph-instagram-logo"></i>
+              </div>
+              <div class="contacto-item-info">
+                <strong>Instagram</strong>
+                <span>@TU_USUARIO_AQUI</span>  <!-- CAMBIA AQUÍ -->
+              </div>
+              <i class="ph-bold ph-arrow-square-out contacto-arrow"></i>
+            </a>
+
+            <!-- ── WHATSAPP / TELÉFONO ────────────────────────────
+                 CAMBIA AQUÍ el href con tu número (código país + número)
+                 Ejemplo: href="https://wa.me/18091234567"
+                 Si prefieres solo llamada: href="tel:+18091234567"
+                 CAMBIA AQUÍ el texto del número visible -->
+            <a class="contacto-item" href="https://wa.me/1TUNUMERODEAQUI" target="_blank">
+              <div class="contacto-icon-wrap whatsapp">
+                <i class="ph-bold ph-whatsapp-logo"></i>
+              </div>
+              <div class="contacto-item-info">
+                <strong>WhatsApp / Teléfono</strong>
+                <span>+1 (000) 000-0000</span>  <!-- CAMBIA AQUÍ -->
+              </div>
+              <i class="ph-bold ph-arrow-square-out contacto-arrow"></i>
+            </a>
+
+            <!-- ── GMAIL / CORREO ─────────────────────────────────
+                 CAMBIA AQUÍ el href con tu correo: mailto:tucorreo@gmail.com
+                 CAMBIA AQUÍ el texto visible con tu correo real -->
+            <a class="contacto-item" href="mailto:TUCORREO@gmail.com">
+              <div class="contacto-icon-wrap gmail">
+                <i class="ph-bold ph-envelope-simple"></i>
+              </div>
+              <div class="contacto-item-info">
+                <strong>Correo Electrónico</strong>
+                <span>TUCORREO@gmail.com</span>  <!-- CAMBIA AQUÍ -->
+              </div>
+              <i class="ph-bold ph-arrow-square-out contacto-arrow"></i>
+            </a>
+
+            <!-- ── RED SOCIAL EXTRA (opcional) ───────────────────
+                 Copia el bloque de arriba y pega aquí
+                 Cambia el ícono por: ph-linkedin-logo, ph-tiktok-logo,
+                 ph-twitter-logo, ph-facebook-logo, ph-github-logo -->
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       MODAL: CONFIGURAR PORTAFOLIO
+  ============================================================ -->
+  <div class="modal-overlay" id="modalConfig">
+    <div class="modal">
+      <button class="modal-close" id="closeConfig">✕</button>
+      <h2><i class="ph-bold ph-gear"></i> Configurar Portafolio</h2>
+      <p>Ingresa tus datos personales para personalizar el portafolio.</p>
+
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" id="inputNombre" placeholder="Ej.: María García López"/>
+      </div>
+      <!-- Campo de matrícula (nuevo) -->
+      <div class="form-group">
+        <label>Matrícula del estudiante</label>
+        <input type="text" id="inputMatricula" placeholder="Ej.: 2023-0123"/>
+      </div>
+      <div class="form-group">
+        <label>Nombre de la asignatura</label>
+        <input type="text" id="inputAsignatura" placeholder="Ej.: Matemáticas I"/>
+      </div>
+      <div class="form-group">
+        <label>Fecha de inicio</label>
+        <input type="date" id="inputFecha"/>
+      </div>
+
+      <button class="btn-primary" id="btnGuardarConfig">
+        <i class="ph-bold ph-floppy-disk"></i> Guardar
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: AGREGAR ACTIVIDAD
+  ============================================================ -->
+  <div class="modal-overlay" id="modalActividad">
+    <div class="modal">
+      <button class="modal-close" id="closeActividad">✕</button>
+      <h2><i class="ph-bold ph-note-pencil"></i> Nueva Actividad</h2>
+      <div class="form-group">
+        <label>Nombre de la actividad</label>
+        <input type="text" id="actNombre" placeholder="Ej.: Tarea 1 – Introducción"/>
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="actTipo">
+          <option value="tarea">📝 Tarea</option>
+          <option value="evaluacion">📊 Evaluación</option>
+          <option value="proyecto">🚀 Proyecto</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="actDescripcion" placeholder="Describe brevemente la actividad..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Fecha de entrega</label>
+        <input type="date" id="actFecha"/>
+      </div>
+      <div class="form-group">
+        <label>Calificación (0–10, opcional)</label>
+        <input type="number" id="actCalificacion" min="0" max="10" step="0.1" placeholder="Ej.: 8.5"/>
+      </div>
+      <div class="form-group">
+        <label>Reflexión personal</label>
+        <textarea id="actReflexion" placeholder="En esta actividad aprendí... Me resultó difícil..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Enlace o archivo (URL)</label>
+        <input type="url" id="actEnlace" placeholder="https://..."/>
+      </div>
+      <button class="btn-primary" id="btnGuardarActividad">
+        <i class="ph-bold ph-floppy-disk"></i> Guardar Actividad
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: AGREGAR PROYECTO
+  ============================================================ -->
+  <div class="modal-overlay" id="modalProyecto">
+    <div class="modal">
+      <button class="modal-close" id="closeProyecto">✕</button>
+      <h2><i class="ph-bold ph-rocket-launch"></i> Nuevo Proyecto</h2>
+      <div class="form-group">
+        <label>Nombre del proyecto</label>
+        <input type="text" id="proyNombre" placeholder="Ej.: Proyecto Final – Análisis de Datos"/>
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="proyDescripcion" placeholder="Describe el objetivo y alcance del proyecto..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Fases del proyecto</label>
+        <textarea id="proyFases" placeholder="1. Investigación&#10;2. Diseño&#10;3. Desarrollo&#10;4. Presentación"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Resultados obtenidos</label>
+        <textarea id="proyResultados" placeholder="Describe los resultados y logros alcanzados..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Reflexión sobre el proceso</label>
+        <textarea id="proyReflexion" placeholder="¿Qué aprendiste durante el desarrollo del proyecto?..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Calificación (0–10, opcional)</label>
+        <input type="number" id="proyCalificacion" min="0" max="10" step="0.1"/>
+      </div>
+      <button class="btn-primary" id="btnGuardarProyecto">
+        <i class="ph-bold ph-floppy-disk"></i> Guardar Proyecto
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: NUEVA REFLEXIÓN
+  ============================================================ -->
+  <div class="modal-overlay" id="modalReflexion">
+    <div class="modal">
+      <button class="modal-close" id="closeReflexion">✕</button>
+      <h2><i class="ph-bold ph-chat-dots"></i> Nueva Reflexión</h2>
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" id="refTitulo" placeholder="Ej.: Semana 3 – Mis avances"/>
+      </div>
+      <div class="form-group">
+        <label>Reflexión</label>
+        <textarea id="refContenido" rows="6"
+          placeholder="En esta etapa aprendí... Me resultó difícil... Para superar esta dificultad, decidí..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Estado de ánimo</label>
+        <div class="emoji-picker" id="emojiPicker">
+          <button class="emoji-btn active" data-emoji="😊">😊</button>
+          <button class="emoji-btn" data-emoji="🤔">🤔</button>
+          <button class="emoji-btn" data-emoji="💪">💪</button>
+          <button class="emoji-btn" data-emoji="😅">😅</button>
+          <button class="emoji-btn" data-emoji="🎉">🎉</button>
+        </div>
+      </div>
+      <button class="btn-primary" id="btnGuardarReflexion">
+        <i class="ph-bold ph-floppy-disk"></i> Guardar Reflexión
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: VER DETALLE DE ACTIVIDAD O PROYECTO
+  ============================================================ -->
+  <div class="modal-overlay" id="modalDetalle">
+    <div class="modal modal-wide">
+      <button class="modal-close" id="closeDetalle">✕</button>
+      <div id="detalleContent"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: EDITAR CRITERIO DE LA RÚBRICA
+       Se abre al presionar el ícono de lápiz en la tabla
+  ============================================================ -->
+  <div class="modal-overlay" id="modalRubrica">
+    <div class="modal">
+      <button class="modal-close" id="closeRubrica">✕</button>
+      <h2><i class="ph-bold ph-clipboard-text"></i> Editar Criterio</h2>
+      <p>Modifica el nombre, descripción y porcentaje de este criterio.</p>
+
+      <!-- Guarda el índice del criterio que se está editando (invisible) -->
+      <input type="hidden" id="rubricaEditIdx"/>
+
+      <div class="form-group">
+        <label>Nombre del criterio</label>
+        <input type="text" id="rubricaEditNombre" placeholder="Ej.: Contenido"/>
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="rubricaEditDesc" placeholder="Describe qué se evalúa en este criterio..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Porcentaje (%)</label>
+        <input type="number" id="rubricaEditPct" min="1" max="100" step="1" placeholder="Ej.: 40"/>
+        <small style="color:#888;margin-top:.3rem;display:block">
+          La suma de todos los criterios debe dar 100%.
+        </small>
+      </div>
+
+      <button class="btn-primary" id="btnGuardarRubrica">
+        <i class="ph-bold ph-floppy-disk"></i> Guardar Cambio
+      </button>
+    </div>
+  </div>
+
+  <!-- Mensaje emergente en la esquina de la pantalla -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Botón para volver al inicio de la página -->
+  <button class="back-to-top" id="backToTop" aria-label="Volver arriba">
+    <i class="ph-bold ph-arrow-up"></i>
+  </button>
+
+  <!-- Script JavaScript principal -->
+  <script src="script.js"></script>
+</body>
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
